@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
+use Ramsey\Uuid\Rfc4122\Validator as UuidValidator;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -53,7 +54,11 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::prefix('api')
             ->middleware('api')
-            ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
+    }
+
+    public function boot()
+    {
+        Route::pattern('carId', (new UuidValidator())->getPattern());
     }
 }

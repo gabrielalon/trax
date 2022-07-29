@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Response;
+use System\Http\Controller;
 
 class HomeController extends Controller
 {

@@ -77,9 +77,8 @@ export default {
     },
     submit() {
       if (this.$refs.form.validate()) {
-        axios.post(traxAPI.addTripEndpoint(), {
+        axios.post(traxAPI.addTripEndpoint(this.car), {
           date: this.date.toISOString(),
-          car_id: this.car,
           miles: this.miles
         })
           .then(response => {

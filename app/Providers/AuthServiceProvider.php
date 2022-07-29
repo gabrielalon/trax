@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use Components\CarSegment\Adapters\Infrastructure\ORM\Car;
+use Components\CarSegment\Adapters\Infrastructure\Policies\CarOwnerPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -14,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        Car::class => CarOwnerPolicy::class,
     ];
 
     /**
