@@ -30,7 +30,7 @@ final class CarCreateHttpAdapterTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('car_brands', [
-            'name' => $payload['make'],
+            'name' => $payload['brand'],
         ]);
 
         $this->assertDatabaseHas('car_models', [
@@ -79,7 +79,7 @@ final class CarCreateHttpAdapterTest extends TestCase
         return [
             'missing brand' => [
                 CarCreateRequestAssembler::new()->withBrand(null)->assemble(),
-                ['make' => ['The make field is required.']],
+                ['brand' => ['The brand field is required.']],
             ],
             'missing model' => [
                 CarCreateRequestAssembler::new()->withModel(null)->assemble(),
@@ -91,7 +91,7 @@ final class CarCreateHttpAdapterTest extends TestCase
             ],
             'invalid brand' => [
                 CarCreateRequestAssembler::new()->withBrand(124)->assemble(),
-                ['make' => ['The make must be a string.']],
+                ['brand' => ['The brand must be a string.']],
             ],
             'invalid model' => [
                 CarCreateRequestAssembler::new()->withModel(124)->assemble(),

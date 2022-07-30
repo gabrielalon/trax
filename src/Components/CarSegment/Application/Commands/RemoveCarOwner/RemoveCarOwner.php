@@ -9,13 +9,8 @@ use System\Messaging\CommandBus\CommandContract;
 final class RemoveCarOwner implements CommandContract
 {
     public function __construct(
-        public readonly UserId $userId,
-        public readonly CarId $carId
+        public readonly int $userId,
+        public readonly string $carId,
     ) {
-    }
-
-    public static function fromRaw(int $userId, string $carId): self
-    {
-        return new self(new UserId($userId), new CarId($carId));
     }
 }

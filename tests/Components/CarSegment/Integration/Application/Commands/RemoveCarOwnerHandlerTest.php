@@ -30,7 +30,7 @@ final class RemoveCarOwnerHandlerTest extends TestCase
         $car = CarsSeeder::seedOneWithOwner($user);
         $trip = CarsSeeder::addTrip($car, $user);
 
-        $command = RemoveCarOwner::fromRaw(
+        $command = new RemoveCarOwner(
             $user->id,
             $car->id,
         );

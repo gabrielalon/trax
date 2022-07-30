@@ -27,7 +27,7 @@ final class CreateCarHandlerTest extends TestCase
     {
         $user = UsersSeeder::seedOne();
 
-        $command = CreateCarWithOwner::fromRaw(
+        $command = new CreateCarWithOwner(
             $user->id,
             'Volvo',
             'XC 60',
@@ -41,15 +41,15 @@ final class CreateCarHandlerTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('car_brands', [
-            'name' => $command->brand->value(),
+            'name' => $command->brand,
         ]);
 
         $this->assertDatabaseHas('car_models', [
-            'name' => $command->model->value(),
+            'name' => $command->model,
         ]);
 
         $this->assertDatabaseHas('car_generations', [
-            'year' => $command->year->value(),
+            'year' => $command->year,
         ]);
     }
 }

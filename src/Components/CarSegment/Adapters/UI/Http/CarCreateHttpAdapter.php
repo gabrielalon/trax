@@ -16,7 +16,7 @@ final class CarCreateHttpAdapter
 
     public function __invoke(CarCreateRequest $request): CarCreatedResponse
     {
-        $this->commandBus->dispatch(CreateCarWithOwner::fromRaw(
+        $this->commandBus->dispatch(new CreateCarWithOwner(
             $request->user()->id,
             $request->brand(),
             $request->model(),

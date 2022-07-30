@@ -2,7 +2,7 @@
   <div>
     <v-layout row style="margin-bottom: 20px">
       <v-flex xs10>
-        <h1>{{ year }} {{ make }} {{ model }}</h1>
+        <h1>{{ year }} {{ brand }} {{ model }}</h1>
       </v-flex>
       <v-flex xs2 style="text-align: right">
         <v-btn class="error" @click="deleteSelected">Delete</v-btn>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       year: null,
-      make: null,
+      brand: null,
       model: null,
       trip_count: null,
       trip_miles: null
@@ -50,7 +50,7 @@ export default {
       axios.get(traxAPI.getCarEndpoint(this.$route.params.id))
         .then(response => {
           this.year = response.data.data.year;
-          this.make = response.data.data.make;
+          this.brand = response.data.data.brand;
           this.model = response.data.data.model;
           this.trip_count = response.data.data.trip_count;
           this.trip_miles = response.data.data.trip_miles;

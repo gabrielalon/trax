@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Components\CarSegment\Integration\Application\Commands;
 
+use Carbon\Carbon;
 use Components\CarSegment\Application\Commands\CreateCarTrip\CreateCarTrip;
 use System\Messaging\CommandBus;
 use Tests\Components\CarSegment\Utils\Seeders\CarsSeeder;
@@ -29,7 +30,7 @@ final class CreateCarTripHandlerTest extends TestCase
         $user = UsersSeeder::seedOne();
         $car = CarsSeeder::seedOneWithOwner($user);
 
-        $command = CreateCarTrip::fromRaw(
+        $command = new CreateCarTrip(
             $user->id,
             $car->id,
             12.32,
@@ -41,8 +42,8 @@ final class CreateCarTripHandlerTest extends TestCase
         $this->assertDatabaseHas('car_trips', [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'miles' => $command->miles->value(),
-            'date' => $command->date->value(),
+            'miles' => $command->miles,
+            'date' => Carbon::createFromTimestamp(strtotime($command->date)),
         ]);
     }
 }

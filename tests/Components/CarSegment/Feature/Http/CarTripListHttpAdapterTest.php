@@ -34,7 +34,7 @@ final class CarTripListHttpAdapterTest extends TestCase
                 'total' => $trip->miles,
                 'car' => [
                     'id' => $car->id,
-                    'make' => $car->brand_name,
+                    'brand' => $car->brand_name,
                     'model' => $car->model_name,
                     'year' => $car->year,
                 ],

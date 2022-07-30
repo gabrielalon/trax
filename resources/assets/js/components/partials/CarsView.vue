@@ -17,7 +17,7 @@
           <template slot="items" slot-scope="props">
             <tr @click="rowClicked(props.item.id)">
               <td>{{ props.item.year }}</td>
-              <td>{{ props.item.make }}</td>
+              <td>{{ props.item.brand }}</td>
               <td>{{ props.item.model }}</td>
             </tr>
           </template>
@@ -40,7 +40,7 @@ export default {
       items: [],
       headers: [
         {text: 'Year', value: 'date'},
-        {text: 'Make', value: 'make'},
+        {text: 'Brand', value: 'brand'},
         {text: 'Model', value: 'model'},
       ]
     }

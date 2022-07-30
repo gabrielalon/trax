@@ -17,7 +17,7 @@ class CarTripCreateHttpAdapter extends Controller
 
     public function __invoke(string $carId, CarTripCreateRequest $request): CarTripCreatedResponse
     {
-        $this->bus->dispatch(CreateCarTrip::fromRaw(
+        $this->bus->dispatch(new CreateCarTrip(
             $request->user()->id,
             $carId,
             $request->miles(),

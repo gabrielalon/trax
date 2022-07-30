@@ -3,24 +3,27 @@
     <v-text-field
       v-model="year"
       :rules="[v => !!v  || 'Item is required', v => (v && v.length === 4 && !isNaN(v)) || 'Must be 4 digit year']"
+      :error-messages=errors.year
       label="Year"
       required
     ></v-text-field>
     <v-text-field
-      v-model="make"
-      label="Make"
+      v-model="brand"
+      label="Brand"
+      :error-messages=errors.brand
       required
       :rules="[v => !!v || 'Item is required']"
     ></v-text-field>
     <v-text-field
       v-model="model"
       label="Model"
+      :error-messages=errors.model
       required
       :rules="[v => (!!v) || 'Item is required']"
     ></v-text-field>
 
     <v-btn
-      :disabled="!valid"
+      :disabled="isSubmitButtonDisabled"
       @click="submit"
     >
       submit
@@ -38,8 +41,9 @@ export default {
     return {
       valid: true,
       year: null,
-      make: null,
-      model: null
+      brand: null,
+      model: null,
+      errors: [],
     }
   },
   methods: {
@@ -47,21 +51,26 @@ export default {
       if (this.$refs.form.validate()) {
         axios.post(traxAPI.addCarEndpoint(), {
           year: this.year,
-          make: this.make,
-          model: this.model
+          brand: this.brand,
+          model: this.model,
         })
           .then(response => {
             this.$router.push('/cars')
           })
           .catch(e => {
-            console.log(e);
+            this.errors = e.response.data.errors;
+            this.valid = true;
           });
       }
     },
     clear() {
       this.$refs.form.reset()
     }
-
   },
+  computed: {
+    isSubmitButtonDisabled() {
+      return !(this.year && this.brand && this.model);
+    },
+  }
 }
 </script>

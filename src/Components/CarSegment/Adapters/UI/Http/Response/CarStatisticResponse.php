@@ -11,7 +11,7 @@ final class CarStatisticResponse extends JsonApiResponse
     {
         return new self([
             'id' => $carStatisticDto->carDto->id,
-            'make' => $carStatisticDto->carDto->brand,
+            'brand' => $carStatisticDto->carDto->brand,
             'model' => $carStatisticDto->carDto->model,
             'year' => $carStatisticDto->carDto->year,
             'trip_count' => $carStatisticDto->tripCount,

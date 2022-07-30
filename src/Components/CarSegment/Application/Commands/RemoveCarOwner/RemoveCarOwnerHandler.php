@@ -19,7 +19,10 @@ final class RemoveCarOwnerHandler implements CommandHandlerContract
     {
         assert($command instanceof RemoveCarOwner);
 
-        $this->assigner->unAssignOwner($command->carId, $command->userId);
-        $this->trips->remove($command->userId, $command->carId);
+        $model = $this->trips->find($command->userId, $command->carId);
+
+        $this->assigner->unAssignOwner($model->carId, $model->userId);
+
+        $this->trips->remove($model);
     }
 }

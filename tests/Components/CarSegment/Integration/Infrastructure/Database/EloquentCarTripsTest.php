@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Tests\Components\CarSegment\Integration\Infrastructure\Database;
 
 use Components\CarSegment\Adapters\Infrastructure\Database\EloquentCarTrips;
-use Components\CarSegment\Application\Values\CarId;
-use Components\CarSegment\Application\Values\TripDate;
-use Components\CarSegment\Application\Values\TripMiles;
-use Components\CarSegment\Application\Values\UserId;
+use Components\CarSegment\Application\DomainModels\CarTrip;
 use Tests\Components\CarSegment\Utils\Seeders\CarsSeeder;
 use Tests\Components\CarSegment\Utils\Seeders\UsersSeeder;
 use Tests\TestCase;
@@ -31,16 +28,15 @@ final class EloquentCarTripsTest extends TestCase
     {
         $user = UsersSeeder::seedOne();
         $car = CarsSeeder::seedOneWithOwner($user);
-        $miles = new TripMiles(12.32);
-        $date = new TripDate('2022-07-12T22:00:00.000Z');
+        $model = CarTrip::create($user->id, $car->id, 12.32, $this->faker->date());
 
-        $this->carTrips->create(new UserId($user->id), new CarId($car->id), $miles, $date);
+        $this->carTrips->save($model);
 
         $this->assertDatabaseHas('car_trips', [
             'car_id' => $car->id,
             'user_id' => $user->id,
-            'miles' => $miles->value(),
-            'date' => $date->value(),
+            'miles' => $model->miles->value(),
+            'date' => $model->date->value(),
         ]);
     }
 
@@ -48,8 +44,10 @@ final class EloquentCarTripsTest extends TestCase
     {
         $user = UsersSeeder::seedOne();
         $car = CarsSeeder::seedOneWithOwner($user);
+        $carTrip = CarsSeeder::addTrip($car, $user, $miles = 12.32);
+        $model = CarTrip::create($user->id, $car->id, $miles, $carTrip->date->toDateTimeString());
 
-        $this->carTrips->remove(new UserId($user->id), new CarId($car->id));
+        $this->carTrips->remove($model);
 
         $this->assertDatabaseMissing('car_trips', [
             'car_id' => $car->id,

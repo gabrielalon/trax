@@ -10,14 +10,14 @@ final class CarCreateRequest extends FormRequest
     {
         return [
             'year' => 'required|integer|min:1901',
-            'make' => 'required|string',
+            'brand' => 'required|string',
             'model' => 'required|string',
         ];
     }
 
     public function brand(): string
     {
-        return $this->validated()['make'];
+        return $this->validated()['brand'];
     }
 
     public function model(): string

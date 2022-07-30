@@ -16,7 +16,7 @@ final class CarTripListResponse extends JsonApiListResponse
             'total' => $carTrip->total,
             'car' => [
                 'id' => $carTrip->carDto->id,
-                'make' => $carTrip->carDto->brand,
+                'brand' => $carTrip->carDto->brand,
                 'model' => $carTrip->carDto->model,
                 'year' => $carTrip->carDto->year,
             ],

@@ -11,24 +11,10 @@ use System\Messaging\CommandBus\CommandContract;
 final class CreateCarTrip implements CommandContract
 {
     public function __construct(
-        public readonly UserId $userId,
-        public readonly CarId $carId,
-        public readonly TripMiles $miles,
-        public readonly TripDate $date,
+        public readonly int $userId,
+        public readonly string $carId,
+        public readonly float $miles,
+        public readonly string $date,
     ) {
-    }
-
-    public static function fromRaw(
-        int $userId,
-        string $carId,
-        float $miles,
-        string $date,
-    ): self {
-        return new self(
-            new UserId($userId),
-            new CarId($carId),
-            new TripMiles($miles),
-            new TripDate($date),
-        );
     }
 }

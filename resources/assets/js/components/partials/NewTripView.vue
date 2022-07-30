@@ -3,6 +3,7 @@
     <date-picker
       @dateChanged="dateChanged"
       :rules="[v => !!v  || 'Item is required']"
+      :error-messages=errors.date
     ></date-picker>
 
     <v-select
@@ -12,6 +13,7 @@
       item-value="value"
       label="Car Driven"
       :rules="[v => !!v  || 'Item is required']"
+      :error-messages=errors.car
     ></v-select>
 
     <v-text-field
@@ -19,10 +21,11 @@
       label="Miles Driven"
       required
       :rules="[v => !!v  || 'Item is required', v => (v && !isNaN(v)) || 'Must be a number']"
+      :error-messages=errors.miles
     ></v-text-field>
 
     <v-btn
-      :disabled="!valid"
+      :disabled="isSubmitButtonDisabled"
       @click="submit"
     >
       submit
@@ -49,11 +52,16 @@ export default {
       cars: [],
       date: null,
       car: null,
-      miles: null
+      miles: null,
+      errors: [],
     }
   },
   watch: {},
-  computed: {},
+  computed: {
+    isSubmitButtonDisabled() {
+      return !(this.date && this.car && this.miles);
+    },
+  },
   methods: {
     dateChanged(date) {
       this.date = date;
@@ -65,7 +73,7 @@ export default {
           for (let i = 0; i < response.data.data.length; i++) {
             let car = response.data.data[i];
             cars.push({
-              text: car.year + ' ' + car.make + ' ' + car.model,
+              text: car.year + ' ' + car.brand + ' ' + car.model,
               value: car.id
             });
           }
@@ -85,7 +93,7 @@ export default {
             this.$router.push('/trips')
           })
           .catch(e => {
-            console.log(e);
+            this.errors = e.response.data.errors;
           });
       }
     },

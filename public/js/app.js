@@ -5661,7 +5661,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       year: null,
-      make: null,
+      brand: null,
       model: null,
       trip_count: null,
       trip_miles: null
@@ -5673,7 +5673,7 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get(_traxAPI__WEBPACK_IMPORTED_MODULE_0__.traxAPI.getCarEndpoint(this.$route.params.id)).then(function (response) {
         _this.year = response.data.data.year;
-        _this.make = response.data.data.make;
+        _this.brand = response.data.data.brand;
         _this.model = response.data.data.model;
         _this.trip_count = response.data.data.trip_count;
         _this.trip_miles = response.data.data.trip_miles;
@@ -5750,8 +5750,8 @@ __webpack_require__.r(__webpack_exports__);
         text: 'Year',
         value: 'date'
       }, {
-        text: 'Make',
-        value: 'make'
+        text: 'Brand',
+        value: 'brand'
       }, {
         text: 'Model',
         value: 'model'
@@ -5825,14 +5825,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       valid: true,
       year: null,
-      make: null,
-      model: null
+      brand: null,
+      model: null,
+      errors: []
     };
   },
   methods: {
@@ -5842,17 +5846,23 @@ __webpack_require__.r(__webpack_exports__);
       if (this.$refs.form.validate()) {
         axios.post(_traxAPI__WEBPACK_IMPORTED_MODULE_0__.traxAPI.addCarEndpoint(), {
           year: this.year,
-          make: this.make,
+          brand: this.brand,
           model: this.model
         }).then(function (response) {
           _this.$router.push('/cars');
         })["catch"](function (e) {
-          console.log(e);
+          _this.errors = e.response.data.errors;
+          _this.valid = true;
         });
       }
     },
     clear: function clear() {
       this.$refs.form.reset();
+    }
+  },
+  computed: {
+    isSubmitButtonDisabled: function isSubmitButtonDisabled() {
+      return !(this.year && this.brand && this.model);
     }
   }
 });
@@ -5906,6 +5916,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5921,11 +5934,16 @@ __webpack_require__.r(__webpack_exports__);
       cars: [],
       date: null,
       car: null,
-      miles: null
+      miles: null,
+      errors: []
     };
   },
   watch: {},
-  computed: {},
+  computed: {
+    isSubmitButtonDisabled: function isSubmitButtonDisabled() {
+      return !(this.date && this.car && this.miles);
+    }
+  },
   methods: {
     dateChanged: function dateChanged(date) {
       this.date = date;
@@ -5939,7 +5957,7 @@ __webpack_require__.r(__webpack_exports__);
         for (var i = 0; i < response.data.data.length; i++) {
           var car = response.data.data[i];
           cars.push({
-            text: car.year + ' ' + car.make + ' ' + car.model,
+            text: car.year + ' ' + car.brand + ' ' + car.model,
             value: car.id
           });
         }
@@ -5959,7 +5977,7 @@ __webpack_require__.r(__webpack_exports__);
         }).then(function (response) {
           _this2.$router.push('/trips');
         })["catch"](function (e) {
-          console.log(e);
+          _this2.errors = e.response.data.errors;
         });
       }
     },
@@ -65047,7 +65065,7 @@ var render = function () {
               _vm._v(
                 _vm._s(_vm.year) +
                   " " +
-                  _vm._s(_vm.make) +
+                  _vm._s(_vm.brand) +
                   " " +
                   _vm._s(_vm.model)
               ),
@@ -65181,7 +65199,7 @@ var render = function () {
                           [
                             _c("td", [_vm._v(_vm._s(props.item.year))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(props.item.make))]),
+                            _c("td", [_vm._v(_vm._s(props.item.brand))]),
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(props.item.model))]),
                           ]
@@ -65250,6 +65268,7 @@ var render = function () {
               )
             },
           ],
+          "error-messages": _vm.errors.year,
           label: "Year",
           required: "",
         },
@@ -65264,7 +65283,8 @@ var render = function () {
       _vm._v(" "),
       _c("v-text-field", {
         attrs: {
-          label: "Make",
+          label: "Brand",
+          "error-messages": _vm.errors.brand,
           required: "",
           rules: [
             function (v) {
@@ -65273,17 +65293,18 @@ var render = function () {
           ],
         },
         model: {
-          value: _vm.make,
+          value: _vm.brand,
           callback: function ($$v) {
-            _vm.make = $$v
+            _vm.brand = $$v
           },
-          expression: "make",
+          expression: "brand",
         },
       }),
       _vm._v(" "),
       _c("v-text-field", {
         attrs: {
           label: "Model",
+          "error-messages": _vm.errors.model,
           required: "",
           rules: [
             function (v) {
@@ -65302,7 +65323,10 @@ var render = function () {
       _vm._v(" "),
       _c(
         "v-btn",
-        { attrs: { disabled: !_vm.valid }, on: { click: _vm.submit } },
+        {
+          attrs: { disabled: _vm.isSubmitButtonDisabled },
+          on: { click: _vm.submit },
+        },
         [_vm._v("\n    submit\n  ")]
       ),
       _vm._v(" "),
@@ -65355,6 +65379,7 @@ var render = function () {
               return !!v || "Item is required"
             },
           ],
+          "error-messages": _vm.errors.date,
         },
         on: { dateChanged: _vm.dateChanged },
       }),
@@ -65370,6 +65395,7 @@ var render = function () {
               return !!v || "Item is required"
             },
           ],
+          "error-messages": _vm.errors.car,
         },
         model: {
           value: _vm.car,
@@ -65392,6 +65418,7 @@ var render = function () {
               return (v && !isNaN(v)) || "Must be a number"
             },
           ],
+          "error-messages": _vm.errors.miles,
         },
         model: {
           value: _vm.miles,
@@ -65404,7 +65431,10 @@ var render = function () {
       _vm._v(" "),
       _c(
         "v-btn",
-        { attrs: { disabled: !_vm.valid }, on: { click: _vm.submit } },
+        {
+          attrs: { disabled: _vm.isSubmitButtonDisabled },
+          on: { click: _vm.submit },
+        },
         [_vm._v("\n    submit\n  ")]
       ),
       _vm._v(" "),
@@ -65486,7 +65516,7 @@ var render = function () {
                             _vm._s(
                               props.item.car.year +
                                 " " +
-                                props.item.car.make +
+                                props.item.car.brand +
                                 " " +
                                 props.item.car.model
                             )

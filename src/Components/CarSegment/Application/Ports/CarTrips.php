@@ -2,14 +2,13 @@
 
 namespace Components\CarSegment\Application\Ports;
 
-use Components\CarSegment\Application\Values\CarId;
-use Components\CarSegment\Application\Values\TripDate;
-use Components\CarSegment\Application\Values\TripMiles;
-use Components\CarSegment\Application\Values\UserId;
+use Components\CarSegment\Application\DomainModels\CarTrip;
 
 interface CarTrips
 {
-    public function create(UserId $userId, CarId $carId, TripMiles $miles, TripDate $date): void;
+    public function find(int $userId, string $carId): CarTrip;
 
-    public function remove(UserId $userId, CarId $carId): void;
+    public function save(CarTrip $model): void;
+
+    public function remove(CarTrip $model): void;
 }

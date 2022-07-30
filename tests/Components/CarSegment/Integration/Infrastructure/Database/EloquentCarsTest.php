@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Tests\Components\CarSegment\Integration\Infrastructure\Database;
 
 use Components\CarSegment\Adapters\Infrastructure\Database\EloquentCars;
-use Components\CarSegment\Application\Values\CarBrand;
-use Components\CarSegment\Application\Values\CarModel;
-use Components\CarSegment\Application\Values\CarYear;
+use Components\CarSegment\Application\DomainModels\Car;
 use Illuminate\Support\Arr;
 use System\Exceptions\NotFoundException;
 use Tests\Components\CarSegment\Utils\Seeders\CarsSeeder;
@@ -77,26 +75,24 @@ final class EloquentCarsTest extends TestCase
      */
     public function shouldCreateCar(): void
     {
-        $brand = new CarBrand('Volvo');
-        $model = new CarModel('XC 60');
-        $year = new CarYear((int) date('Y'));
+        $car = Car::create('Volvo', 'XC 60', (int) date('Y'));
 
-        $carId = $this->cars->create($brand, $model, $year);
+        $carId = $this->cars->save($car);
 
         $this->assertDatabaseHas('cars', [
             'id' => $carId->value(),
         ]);
 
         $this->assertDatabaseHas('car_brands', [
-            'name' => $brand->value(),
+            'name' => $car->brand->value(),
         ]);
 
         $this->assertDatabaseHas('car_models', [
-            'name' => $model->value(),
+            'name' => $car->model->value(),
         ]);
 
         $this->assertDatabaseHas('car_generations', [
-            'year' => $year->value(),
+            'year' => $car->year->value(),
         ]);
     }
 }

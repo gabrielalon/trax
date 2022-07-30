@@ -2,6 +2,7 @@
 
 namespace Components\CarSegment\Application\Commands\CreateCarTrip;
 
+use Components\CarSegment\Application\DomainModels\CarTrip;
 use Components\CarSegment\Application\Ports\CarTrips;
 use System\Messaging\CommandBus\CommandContract;
 use System\Messaging\CommandBus\CommandHandlerContract;
@@ -17,6 +18,8 @@ final class CreateCarTripHandler implements CommandHandlerContract
     {
         assert($command instanceof CreateCarTrip);
 
-        $this->trips->create($command->userId, $command->carId, $command->miles, $command->date);
+        $model = CarTrip::create($command->userId, $command->carId, $command->miles, $command->date);
+
+        $this->trips->save($model);
     }
 }

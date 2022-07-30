@@ -16,7 +16,7 @@
         >
           <template slot="items" slot-scope="props">
             <td>{{ props.item.date }}</td>
-            <td>{{ props.item.car.year + ' ' + props.item.car.make + ' ' + props.item.car.model }}</td>
+            <td>{{ props.item.car.year + ' ' + props.item.car.brand + ' ' + props.item.car.model }}</td>
             <td>{{ props.item.miles }}</td>
             <td>{{ props.item.total }}</td>
           </template>

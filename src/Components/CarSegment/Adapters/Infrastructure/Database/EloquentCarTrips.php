@@ -5,8 +5,8 @@ namespace Components\CarSegment\Adapters\Infrastructure\Database;
 use Components\CarSegment\Adapters\Infrastructure\ORM\Car;
 use Components\CarSegment\Adapters\Infrastructure\ORM\CarTrip;
 use Components\CarSegment\Adapters\Infrastructure\Transformers\CarTransformer;
+use Components\CarSegment\Application\DomainModels\CarTrip as DomainCarTrip;
 use Components\CarSegment\Application\Ports\CarTrips;
-use Components\CarSegment\Application\Values as VO;
 use Components\CarSegment\ReadModel\Model\CarStatisticDto;
 use Components\CarSegment\ReadModel\Model\CarTripDto;
 use Components\CarSegment\ReadModel\Ports\GetCarStatistic;
@@ -56,19 +56,47 @@ final class EloquentCarTrips implements CarTrips, GetCarTrips, GetCarStatistic
             ->toArray();
     }
 
-    public function create(VO\UserId $userId, VO\CarId $carId, VO\TripMiles $miles, VO\TripDate $date): void
+    public function find(int $userId, string $carId): DomainCarTrip
     {
-        $car = Car::findOrFail($carId->value());
+        $carTrip = CarTrip::query()
+            ->forCarId($carId)
+            ->forUserId($userId)
+            ->first();
+
+        if ($carTrip === null) {
+            throw new NotFoundException(sprintf(
+                'Car trip with car id `%s` and user id `%d` not found.',
+                $carId,
+                $userId,
+            ));
+        }
+
+        assert($carTrip instanceof CarTrip);
+
+        return DomainCarTrip::create(
+            $userId,
+            $carId,
+            $carTrip->miles,
+            $carTrip->date->toDateTimeString(),
+        );
+    }
+
+    public function save(DomainCarTrip $model): void
+    {
+        $car = Car::findOrFail($model->carId->value());
 
         $car->trips()->create([
-            'user_id' => $userId->value(),
-            'miles' => $miles->value(),
-            'date' => $date->value(),
+            'user_id' => $model->userId->value(),
+            'miles' => $model->miles->value(),
+            'date' => $model->date->value(),
         ]);
     }
 
-    public function remove(VO\UserId $userId, VO\CarId $carId): void
+    public function remove(DomainCarTrip $model): void
     {
-        CarTrip::query()->forCarId($carId->value())->forUserId($userId->value())->delete();
+        CarTrip::query()
+            ->forCarId($model->carId->value())
+            ->forUserId($model->userId->value())
+            ->delete();
     }
 }

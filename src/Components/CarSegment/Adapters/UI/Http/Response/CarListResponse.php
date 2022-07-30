@@ -11,7 +11,7 @@ final class CarListResponse extends JsonApiListResponse
     {
         return new self(array_map(static fn (CarDto $car) => [
             'id' => $car->id,
-            'make' => $car->brand,
+            'brand' => $car->brand,
             'model' => $car->model,
             'year' => $car->year,
         ], $cars));

@@ -43,7 +43,7 @@ final class CarCreateRequestAssembler
     {
         return array_filter([
             'year' => $this->year,
-            'make' => $this->brand,
+            'brand' => $this->brand,
             'model' => $this->model,
         ]);
     }

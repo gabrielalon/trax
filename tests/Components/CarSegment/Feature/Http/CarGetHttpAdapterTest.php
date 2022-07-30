@@ -29,7 +29,7 @@ final class CarGetHttpAdapterTest extends TestCase
 
         self::assertEquals(['data' => [
             'id' => $car->id,
-            'make' => $car->brand_name,
+            'brand' => $car->brand_name,
             'model' => $car->model_name,
             'year' => $car->year,
             'trip_count' => 2,

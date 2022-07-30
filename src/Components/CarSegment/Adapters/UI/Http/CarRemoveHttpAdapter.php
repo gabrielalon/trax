@@ -18,7 +18,7 @@ final class CarRemoveHttpAdapter extends Controller
 
     public function __invoke(string $carId, Request $request): Response
     {
-        $this->commandBus->dispatch(RemoveCarOwner::fromRaw($request->user()->id, $carId));
+        $this->commandBus->dispatch(new RemoveCarOwner($request->user()->id, $carId));
 
         return NoContent::make();
     }
